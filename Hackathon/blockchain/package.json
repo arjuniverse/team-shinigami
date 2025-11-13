@@ -1,0 +1,21 @@
+{
+  "name": "did-vault-blockchain",
+  "version": "1.0.0",
+  "description": "Hardhat blockchain module for DID credential anchoring",
+  "main": "index.js",
+  "scripts": {
+    "node": "hardhat node",
+    "deploy": "hardhat run --network localhost scripts/deploy.js",
+    "compile": "hardhat compile"
+  },
+  "keywords": ["hardhat", "blockchain", "did", "credentials"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "ethers": "^6.9.0"
+  }
+}

@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+dist/
+build/
+out/
+*.log
+
+# Hardhat
+cache/
+artifacts/
+typechain/
+typechain-types/
+
+# IDE
+.vscode/
+.idea/
+.kiro/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+coverage/
+.nyc_output/
+deployed-address.json

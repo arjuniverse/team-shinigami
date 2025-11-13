@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DID Credential Vault MVP - Project Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.3em;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .card h3 {
+            color: var(--primary-dark);
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .icon {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            color: white;
+            font-size: 1.5em;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-box {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+        }
+        
+        .feature-box h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .tech-item {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:hover {
+            background: var(--light);
+        }
+        
+        .check { color: var(--success); font-weight: bold; }
+        .cross { color: var(--danger); font-weight: bold; }
+        
+        .flow-diagram {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .flow-step .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--warning);
+            margin: 20px 0;
+        }
+        
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: #d1fae5;
+            border-radius: 8px;
+            margin: 5px;
+            font-weight: 600;
+            color: #065f46;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2em; }
+            .hero p { font-size: 1.1em; }
+            .card { padding: 20px; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>🔐 DID Credential Vault MVP</h1>
+            <p>A Decentralized Identity and Verifiable Credential System Built on W3C Standards</p>
+            <div style="margin-top: 30px;">
+                <span class="badge badge-success">✓ W3C Compliant</span>
+                <span class="badge badge-info">🔒 Privacy-First</span>
+                <span class="badge badge-warning">⚡ Blockchain-Anchored</span>
+            </div>
+        </div>
+
+        <!-- Problem Statement -->
+        <div class="card">
+            <h2><span class="icon">🎯</span> The Problem We're Solving</h2>
+            <p style="font-size: 1.1em; margin-bottom: 20px;">In today's digital world, identity and credential management faces critical challenges:</p>
+            
+            <div class="grid">
+                <div class="feature-box">
+                    <h4>🏢 Centralized Control</h4>
+                    <p>Traditional systems require users to trust centralized authorities with their identity data, creating single points of failure and privacy risks.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>🔓 Data Breaches</h4>
+                    <p>Centralized databases are prime targets for hackers. When breached, millions of identities are compromised simultaneously.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>📄 Document Verification</h4>
+                    <p>Verifying document authenticity requires contacting issuers, creating delays and privacy concerns as verifiers learn who's checking credentials.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>🔍 Over-Disclosure</h4>
+                    <p>Users must share entire documents when only specific attributes are needed (e.g., proving age without revealing birthdate).</p>
+                </div>
+                <div class="feature-box">
+                    <h4>🌐 Lack of Interoperability</h4>
+                    <p>Different systems use incompatible formats, making it difficult to use credentials across platforms and jurisdictions.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>🔐 No User Control</h4>
+                    <p>Users can't truly own or control their digital identities—they're always dependent on third-party platforms.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- What We've Built -->
+        <div class="card">
+            <h2><span class="icon">✨</span> What We've Built</h2>
+            <p style="font-size: 1.1em; margin-bottom: 20px;">A complete decentralized identity and credential management system that puts users in control:</p>
+            
+            <h3>🎉 Working Features</h3>
+            <div class="grid">
+                <div class="feature-box">
+                    <h4>✅ Self-Sovereign Identity</h4>
+                    <p>Users generate their own DIDs (Decentralized Identifiers) directly in the browser—no registration, no central authority.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ Encrypted File Storage</h4>
+                    <p>Files are encrypted client-side using AES-GCM before upload to Cloudflare R2, ensuring privacy at rest.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ Verifiable Credentials</h4>
+                    <p>W3C-compliant credentials with cryptographic proofs that can be verified without contacting the issuer.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ Encrypted Vault</h4>
+                    <p>Browser-based credential storage with passphrase-protected encryption using WebCrypto API.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ Verifiable Presentations</h4>
+                    <p>Create tamper-evident packages of credentials signed with your DID to prove ownership.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ Cryptographic Verification</h4>
+                    <p>Instant verification of credential authenticity and validity without contacting issuers.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ Revocation Registry</h4>
+                    <p>Issuers can revoke compromised credentials, which are checked during verification.</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ Blockchain Anchoring</h4>
+                    <p>Optional credential hash anchoring on Ethereum for immutable proof of existence.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="card">
+            <h2><span class="icon">⚙️</span> How It Works</h2>
+            
+            <h3>🔑 DID Generation: Your Self-Sovereign Identity</h3>
+            <div class="highlight">
+                <p><strong>The Magic of did:key</strong></p>
+                <p>When you click "Generate DID", here's what happens behind the scenes:</p>
+            </div>
+            
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <strong>Generate Ed25519 Key Pair</strong>
+                        <p>The browser's WebCrypto API creates a cryptographically secure Ed25519 key pair (public + private key).</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <strong>Encode Public Key</strong>
+                        <p>The public key is encoded using Multibase (base58btc) and Multicodec formats.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <strong>Create DID String</strong>
+                        <p>The encoded key becomes your DID: <code>did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH</code></p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <strong>Store Locally</strong>
+                        <p>Your DID and private key are stored in browser localStorage for signing operations.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+// Simplified DID Generation Code
+const keyPair = await crypto.subtle.generateKey(
+    { name: "Ed25519", namedCurve: "Ed25519" },
+    true,
+    ["sign", "verify"]
+);
+
+const publicKeyBytes = await crypto.subtle.exportKey("raw", keyPair.publicKey);
+const multicodecKey = new Uint8Array([0xed, 0x01, ...publicKeyBytes]);
+const did = "did:key:" + base58btc.encode(multicodecKey);
+
+// Result: did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH
+            </div>
+            
+            <p><strong>Why did:key?</strong> It's self-contained (no blockchain lookup needed), instant to create, and perfect for MVP demonstrations. The public key IS the identifier!</p>
+        </div>
+
+        <!-- Complete Flow -->
+        <div class="card">
+            <h2><span class="icon">🔄</span> Complete User Flow</h2>
+            
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <strong>Upload Encrypted File</strong>
+                        <p>User selects a file → Encrypted with AES-GCM in browser → Uploaded to Cloudflare R2 → Storage key returned</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <strong>Generate DID</strong>
+                        <p>User clicks "Generate DID" → Ed25519 key pair created → did:key identifier generated → Stored in localStorage</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <strong>Request Credential</strong>
+                        <p>User requests VC with DID + storage claims → Issuer creates W3C VC → Signs with issuer's DID → Returns signed VC</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <strong>Store in Vault</strong>
+                        <p>User enters passphrase → VC encrypted with AES-GCM → Stored in browser localStorage → Passphrase required to unlock</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">5</div>
+                    <div>
+                        <strong>Create Presentation</strong>
+                        <p>User unlocks vault → Selects credentials → Creates VP → Signs with holder's DID → VP ready for sharing</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">6</div>
+                    <div>
+                        <strong>Verify Presentation</strong>
+                        <p>Verifier receives VP → Checks cryptographic signatures → Verifies issuer's signature → Checks revocation status → Returns result</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">7</div>
+                    <div>
+                        <strong>Blockchain Anchor (Optional)</strong>
+                        <p>Credential hash submitted → Transaction sent to Anchor contract → Hash stored on blockchain → Immutable proof created</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security -->
+        <div class="card">
+            <h2><span class="icon">🔒</span> How We Secure Your Documents</h2>
+            
+            <h3>🛡️ Multi-Layer Security Architecture</h3>
+            
+            <div class="feature-box" style="margin: 20px 0;">
+                <h4>Layer 1: Client-Side Encryption</h4>
+                <p><strong>Before files ever leave your browser:</strong></p>
+                <ul>
+                    <li><strong>AES-GCM Encryption:</strong> Military-grade 256-bit encryption using WebCrypto API</li>
+                    <li><strong>Random IV:</strong> Each encryption uses a unique initialization vector</li>
+                    <li><strong>Authentication Tag:</strong> Ensures data hasn't been tampered with</li>
+                    <li><strong>Key Never Transmitted:</strong> Encryption key stays in your browser</li>
+                </ul>
+                <div class="code-block">
+// File Encryption Process
+const key = await crypto.subtle.generateKey(
+    { name: "AES-GCM", length: 256 },
+    true,
+    ["encrypt", "decrypt"]
+);
+
+const iv = crypto.getRandomValues(new Uint8Array(12));
+const encrypted = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv: iv },
+    key,
+    fileData
+);
+// Only encrypted data is uploaded!
+                </div>
+            </div>
+            
+            <div class="feature-box" style="margin: 20px 0;">
+                <h4>Layer 2: Encrypted Storage (R2)</h4>
+                <p><strong>Your files in the cloud:</strong></p>
+                <ul>
+                    <li><strong>Already Encrypted:</strong> R2 receives only encrypted data</li>
+                    <li><strong>No Plaintext:</strong> Even Cloudflare can't read your files</li>
+                    <li><strong>S3-Compatible:</strong> Industry-standard object storage</li>
+                    <li><strong>Access Control:</strong> Only authorized API calls can retrieve files</li>
+                </ul>
+            </div>
+            
+            <div class="feature-box" style="margin: 20px 0;">
+                <h4>Layer 3: Credential Vault Encryption</h4>
+                <p><strong>Your credentials are double-encrypted:</strong></p>
+                <ul>
+                    <li><strong>Passphrase-Based:</strong> You choose a passphrase to encrypt your vault</li>
+                    <li><strong>PBKDF2 Key Derivation:</strong> Passphrase → cryptographic key using 100,000 iterations</li>
+                    <li><strong>Unique Salt:</strong> Each credential has a unique salt for key derivation</li>
+                    <li><strong>AES-GCM Again:</strong> Credentials encrypted before localStorage storage</li>
+                </ul>
+                <div class="code-block">
+// Vault Encryption Process
+const salt = crypto.getRandomValues(new Uint8Array(16));
+const keyMaterial = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(passphrase),
+    "PBKDF2",
+    false,
+    ["deriveBits", "deriveKey"]
+);
+
+const key = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
+    keyMaterial,
+    { name: "AES-GCM", length: 256 },
+    true,
+    ["encrypt", "decrypt"]
+);
+// Credentials encrypted with derived key
+                </div>
+            </div>
+            
+            <div class="feature-box" style="margin: 20px 0;">
+                <h4>Layer 4: Cryptographic Signatures</h4>
+                <p><strong>Tamper-proof credentials:</strong></p>
+                <ul>
+                    <li><strong>Ed25519 Signatures:</strong> Each credential signed by issuer's private key</li>
+                    <li><strong>JWT Proof Format:</strong> Industry-standard JSON Web Token proofs</li>
+                    <li><strong>Holder Signatures:</strong> Presentations signed by holder to prove ownership</li>
+                    <li><strong>Verification Without Issuer:</strong> Anyone can verify signatures using public keys</li>
+                </ul>
+            </div>
+            
+            <div class="feature-box" style="margin: 20px 0;">
+                <h4>Layer 5: Blockchain Anchoring</h4>
+                <p><strong>Immutable proof of existence:</strong></p>
+                <ul>
+                    <li><strong>Hash Storage:</strong> Credential hashes (not data) stored on blockchain</li>
+                    <li><strong>Timestamp Proof:</strong> Blockchain provides immutable timestamp</li>
+                    <li><strong>No Reversal:</strong> Once anchored, cannot be altered or deleted</li>
+                    <li><strong>Public Verification:</strong> Anyone can verify a credential was issued at a specific time</li>
+                </ul>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>🔐 Security Summary:</strong> Your files are encrypted before upload, your credentials are encrypted before storage, everything is cryptographically signed, and blockchain provides immutable proof. Even if someone gains access to R2 or your localStorage, they can't read anything without your keys and passphrase!</p>
+            </div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="card">
+            <h2><span class="icon">💻</span> Technology Stack</h2>
+            
+            <h3>Frontend (Client)</h3>
+            <div class="tech-stack">
+                <div class="tech-item">React 18</div>
+                <div class="tech-item">Vite</div>
+                <div class="tech-item">WebCrypto API</div>
+                <div class="tech-item">@veramo/did-provider-key</div>
+                <div class="tech-item">localStorage</div>
+            </div>
+            <p><strong>Why these choices?</strong> React provides a modern, component-based UI. Vite offers lightning-fast development. WebCrypto API is built into browsers for secure encryption without external dependencies.</p>
+            
+            <h3>Backend (Issuer Service)</h3>
+            <div class="tech-stack">
+                <div class="tech-item">Node.js 18+</div>
+                <div class="tech-item">Express</div>
+                <div class="tech-item">Veramo Framework</div>
+                <div class="tech-item">AWS SDK v3</div>
+                <div class="tech-item">ethers.js</div>
+            </div>
+            <p><strong>Why these choices?</strong> Node.js enables JavaScript across the stack. Veramo is the leading W3C-compliant credential framework. AWS SDK provides S3-compatible R2 access. ethers.js is the standard for Ethereum interaction.</p>
+            
+            <h3>Blockchain</h3>
+            <div class="tech-stack">
+                <div class="tech-item">Hardhat</div>
+                <div class="tech-item">Solidity</div>
+                <div class="tech-item">Ethereum</div>
+            </div>
+            <p><strong>Why these choices?</strong> Hardhat is the industry-standard Ethereum development environment with excellent testing tools. Solidity is the most mature smart contract language.</p>
+            
+            <h3>Standards & Protocols</h3>
+            <div class="tech-stack">
+                <div class="tech-item">W3C Verifiable Credentials 1.1</div>
+                <div class="tech-item">W3C DID Core</div>
+                <div class="tech-item">JWT (RFC 7519)</div>
+                <div class="tech-item">Ed25519 Signatures</div>
+                <div class="tech-item">AES-GCM Encryption</div>
+            </div>
+            <p><strong>Why standards matter?</strong> Following W3C standards ensures interoperability with other systems and future-proofs the implementation.</p>
+        </div>
+
+        <!-- Comparison -->
+        <div class="card">
+            <h2><span class="icon">⚖️</span> How We Stand Out</h2>
+            
+            <h3>🆚 Comparison with Traditional Systems</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Traditional Systems</th>
+                        <th>Our Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Identity Control</strong></td>
+                        <td><span class="cross">✗</span> Controlled by companies</td>
+                        <td><span class="check">✓</span> User-controlled DIDs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Storage</strong></td>
+                        <td><span class="cross">✗</span> Centralized databases</td>
+                        <td><span class="check">✓</span> Encrypted, distributed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Privacy</strong></td>
+                        <td><span class="cross">✗</span> Full disclosure required</td>
+                        <td><span class="check">✓</span> Selective disclosure ready</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Verification</strong></td>
+                        <td><span class="cross">✗</span> Must contact issuer</td>
+                        <td><span class="check">✓</span> Cryptographic, instant</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interoperability</strong></td>
+                        <td><span class="cross">✗</span> Proprietary formats</td>
+                        <td><span class="check">✓</span> W3C standards</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Single Point of Failure</strong></td>
+                        <td><span class="cross">✗</span> Yes (central server)</td>
+                        <td><span class="check">✓</span> No (decentralized)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blockchain Proof</strong></td>
+                        <td><span class="cross">✗</span> Not available</td>
+                        <td><span class="check">✓</span> Optional anchoring</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>🆚 Comparison with address.do</h3>
+            <div class="highlight">
+                <p><strong>Note:</strong> address.do is a proof-of-address service. Here's how we differ:</p>
+            </div>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>address.do</th>
+                        <th>DID Credential Vault</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Scope</strong></td>
+                        <td>Address verification only</td>
+                        <td>Universal credential system (any document type)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Identity Model</strong></td>
+                        <td>Traditional accounts</td>
+                        <td>Self-sovereign DIDs (no accounts needed)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Standards</strong></td>
+                        <td>Proprietary</td>
+                        <td>W3C Verifiable Credentials & DID Core</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Encryption</strong></td>
+                        <td>Server-side</td>
+                        <td>Client-side (end-to-end)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Credential Storage</strong></td>
+                        <td>Centralized database</td>
+                        <td>User's encrypted browser vault</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Verification</strong></td>
+                        <td>Must query their API</td>
+                        <td>Cryptographic verification (no API needed)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blockchain</strong></td>
+                        <td>Not integrated</td>
+                        <td>Optional credential anchoring</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interoperability</strong></td>
+                        <td>Limited to their ecosystem</td>
+                        <td>Works with any W3C-compliant system</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Privacy</strong></td>
+                        <td>Company knows all verifications</td>
+                        <td>Verifications are peer-to-peer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Cases</strong></td>
+                        <td>Address verification</td>
+                        <td>Passports, licenses, diplomas, medical records, etc.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="highlight">
+                <p><strong>🎯 Our Unique Value:</strong> We provide a complete, standards-based, self-sovereign identity solution that works for ANY credential type, not just addresses. Users truly own their identity and credentials, with cryptographic proofs that work without our servers.</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="card">
+            <h2><span class="icon">🚀</span> What's Next: Production Roadmap</h2>
+            
+            <p style="font-size: 1.1em; margin-bottom: 20px;">This MVP demonstrates the core concepts. Here's what needs to be built for production deployment:</p>
+            
+            <h3>🔴 Critical (Must-Have for Production)</h3>
+            <div class="grid">
+                <div class="feature-box">
+                    <h4>1. Secure Key Storage</h4>
+                    <p><strong>Current:</strong> localStorage (unencrypted)</p>
+                    <p><strong>Needed:</strong> Hardware Security Modules (HSM), Secure Enclave, or cloud KMS (AWS KMS, Azure Key Vault)</p>
+                    <p><strong>Why:</strong> Private keys in localStorage are vulnerable to XSS attacks</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>2. Production DID Methods</h4>
+                    <p><strong>Current:</strong> did:key (ephemeral)</p>
+                    <p><strong>Needed:</strong> did:ethr (Ethereum-based) or did:web (web-based)</p>
+                    <p><strong>Why:</strong> did:key can't be updated or recovered; production needs persistent, resolvable DIDs</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>3. Persistent Database</h4>
+                    <p><strong>Current:</strong> In-memory + file-based</p>
+                    <p><strong>Needed:</strong> PostgreSQL for relational data, Redis for caching</p>
+                    <p><strong>Why:</strong> Current storage is lost on restart; production needs reliability</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>4. Production Revocation Registry</h4>
+                    <p><strong>Current:</strong> Simple JSON file</p>
+                    <p><strong>Needed:</strong> W3C Status List 2021 or blockchain-based registry</p>
+                    <p><strong>Why:</strong> Scalability and standards compliance</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>5. Authentication & Authorization</h4>
+                    <p><strong>Current:</strong> No authentication</p>
+                    <p><strong>Needed:</strong> OAuth 2.0, API keys, RBAC, MFA</p>
+                    <p><strong>Why:</strong> API endpoints are currently open to anyone</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>6. Rate Limiting & Security</h4>
+                    <p><strong>Current:</strong> No rate limiting</p>
+                    <p><strong>Needed:</strong> Rate limiting, input validation, HTTPS/TLS</p>
+                    <p><strong>Why:</strong> Prevent abuse and DoS attacks</p>
+                </div>
+            </div>
+            
+            <h3>🟡 High Priority (Important for UX)</h3>
+            <div class="grid">
+                <div class="feature-box">
+                    <h4>7. Selective Disclosure (BBS+)</h4>
+                    <p><strong>Current:</strong> Full credential disclosure</p>
+                    <p><strong>Needed:</strong> BBS+ signatures for selective disclosure</p>
+                    <p><strong>Why:</strong> Privacy—reveal only necessary attributes (e.g., "age > 18" without birthdate)</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>8. Mobile Wallet</h4>
+                    <p><strong>Current:</strong> Browser-only</p>
+                    <p><strong>Needed:</strong> Native iOS/Android apps</p>
+                    <p><strong>Why:</strong> Mobile is primary device for most users</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>9. QR Code Sharing</h4>
+                    <p><strong>Current:</strong> Copy/paste JSON</p>
+                    <p><strong>Needed:</strong> QR codes for credential exchange</p>
+                    <p><strong>Why:</strong> Better UX for in-person verification</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>10. Passphrase Recovery</h4>
+                    <p><strong>Current:</strong> No recovery mechanism</p>
+                    <p><strong>Needed:</strong> Recovery codes, social recovery, security questions</p>
+                    <p><strong>Why:</strong> Lost passphrase = lost credentials forever</p>
+                </div>
+            </div>
+            
+            <h3>🟢 Nice to Have (Future Enhancements)</h3>
+            <div class="grid">
+                <div class="feature-box">
+                    <h4>11. Credential Templates</h4>
+                    <p>Pre-built templates for common credential types (passport, license, diploma)</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>12. Batch Operations</h4>
+                    <p>Issue or verify multiple credentials at once</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>13. Credential Marketplace</h4>
+                    <p>Ecosystem where issuers can offer credential services</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>14. Zero-Knowledge Proofs</h4>
+                    <p>Prove statements without revealing underlying data</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>15. Cross-Chain Support</h4>
+                    <p>Support multiple blockchains (Ethereum, Polygon, Solana)</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>16. Credential Schemas</h4>
+                    <p>Standardized schemas for different credential types</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>📅 Estimated Timeline:</strong></p>
+                <ul>
+                    <li><strong>Phase 1 (Critical):</strong> 3-4 months - Security hardening and infrastructure</li>
+                    <li><strong>Phase 2 (High Priority):</strong> 2-3 months - Privacy features and mobile</li>
+                    <li><strong>Phase 3 (Nice to Have):</strong> Ongoing - Feature enhancements based on user feedback</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Architecture Diagram -->
+        <div class="card">
+            <h2><span class="icon">🏗️</span> System Architecture</h2>
+            
+            <div class="code-block" style="background: white; color: #1e293b; border: 2px solid var(--border);">
+<pre style="margin: 0;">
+┌─────────────────────────────────────────────────────────────────┐
+│                    Browser (Client - Port 5173)                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐│
+│  │   React UI   │  │  Encrypted   │  │   DID Manager          ││
+│  │  Components  │  │    Vault     │  │  (did:key generator)   ││
+│  │              │  │ (localStorage)│  │                        ││
+│  │ - Upload     │  │              │  │  WebCrypto API         ││
+│  │ - Vault      │  │  AES-GCM     │  │  - AES-GCM encryption  ││
+│  │ - Verifier   │  │  Encrypted   │  │  - Ed25519 signing     ││
+│  └──────┬───────┘  └──────────────┘  └────────────────────────┘│
+│         │                                                        │
+└─────────┼────────────────────────────────────────────────────────┘
+          │ HTTP/HTTPS
+          │
+┌─────────▼────────────────────────────────────────────────────────┐
+│              Issuer Service (Node.js - Port 8080)                │
+│  ┌──────────────────┐  ┌─────────────────┐  ┌─────────────────┐│
+│  │   Express API    │  │  Veramo Agent   │  │   Revocation    ││
+│  │                  │  │                 │  │    Registry     ││
+│  │  POST /upload    │  │  - KeyManager   │  │  (revoke.json)  ││
+│  │  POST /issue     │  │  - DIDManager   │  │                 ││
+│  │  POST /verify    │  │  - Credential   │  │  Check revoked  ││
+│  │  POST /anchor    │  │    Plugin       │  │  credential IDs ││
+│  └────────┬─────────┘  └─────────────────┘  └─────────────────┘│
+└───────────┼──────────────────────────────────────────────────────┘
+            │
+            ├──────────────────────┐
+            │                      │
+┌───────────▼────────────┐  ┌──────▼──────────────────────────────┐
+│   Cloudflare R2        │  │  Hardhat Blockchain (Port 8545)     │
+│   Object Storage       │  │  ┌──────────────────────────────┐   │
+│                        │  │  │   Anchor.sol Contract        │   │
+│  - Encrypted files     │  │  │                              │   │
+│  - S3-compatible API   │  │  │  function anchor(bytes32)    │   │
+│  - No plaintext data   │  │  │  function isAnchored(bytes32)│   │
+│                        │  │  │                              │   │
+│                        │  │  │  Stores credential hashes    │   │
+└────────────────────────┘  │  └──────────────────────────────┘   │
+                            │                                      │
+                            │  Local Ethereum Network              │
+                            └──────────────────────────────────────┘
+</pre>
+            </div>
+            
+            <h3>Data Flow Example: Credential Issuance</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="step-number">1</div>
+                    <div>Client encrypts file with AES-GCM → Uploads to Issuer</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">2</div>
+                    <div>Issuer uploads encrypted file to R2 → Returns storage key</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">3</div>
+                    <div>Client generates DID (did:key) → Stores in localStorage</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">4</div>
+                    <div>Client requests VC with DID + storage key → Sends to Issuer</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">5</div>
+                    <div>Issuer creates VC using Veramo → Signs with issuer DID</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">6</div>
+                    <div>Issuer returns signed VC → Client receives VC</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">7</div>
+                    <div>Client encrypts VC with passphrase → Stores in vault</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Use Cases -->
+        <div class="card">
+            <h2><span class="icon">🎯</span> Real-World Use Cases</h2>
+            
+            <div class="grid">
+                <div class="feature-box">
+                    <h4>🎓 Educational Credentials</h4>
+                    <p><strong>Problem:</strong> Diploma fraud, slow verification</p>
+                    <p><strong>Solution:</strong> Universities issue verifiable diplomas. Employers verify instantly without contacting the university.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>🏥 Medical Records</h4>
+                    <p><strong>Problem:</strong> Fragmented health data, privacy concerns</p>
+                    <p><strong>Solution:</strong> Patients control their medical credentials. Share selectively with doctors while maintaining privacy.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>🚗 Driver's Licenses</h4>
+                    <p><strong>Problem:</strong> Physical cards can be lost or forged</p>
+                    <p><strong>Solution:</strong> Digital licenses in encrypted vault. Prove age without revealing birthdate.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>✈️ Travel Documents</h4>
+                    <p><strong>Problem:</strong> Passport verification delays at borders</p>
+                    <p><strong>Solution:</strong> Cryptographically verifiable travel credentials. Instant verification at checkpoints.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>💼 Professional Certifications</h4>
+                    <p><strong>Problem:</strong> Credential verification is manual and slow</p>
+                    <p><strong>Solution:</strong> Professionals carry verifiable certifications. Employers verify instantly.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>🏠 Proof of Address</h4>
+                    <p><strong>Problem:</strong> Banks require physical utility bills</p>
+                    <p><strong>Solution:</strong> Utility companies issue verifiable address credentials. Banks verify cryptographically.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>🎫 Event Tickets</h4>
+                    <p><strong>Problem:</strong> Ticket fraud and scalping</p>
+                    <p><strong>Solution:</strong> Verifiable tickets tied to holder's DID. Cannot be duplicated or transferred without authorization.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4>🔐 KYC/AML Compliance</h4>
+                    <p><strong>Problem:</strong> Repeated KYC for every service</p>
+                    <p><strong>Solution:</strong> One-time KYC credential. Reuse across services while maintaining privacy.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Deep Dive -->
+        <div class="card">
+            <h2><span class="icon">🔬</span> Technical Deep Dive</h2>
+            
+            <h3>🔐 Cryptographic Primitives</h3>
+            
+            <div class="feature-box" style="margin: 20px 0;">
+                <h4>AES-GCM (Advanced Encryption Standard - Galois/Counter Mode)</h4>
+                <ul>
+                    <li><strong>Type:</strong> Authenticated encryption</li>
+                    <li><strong>Key Size:</strong> 256 bits</li>
+                    <li><strong>IV Size:</strong> 96 bits (12 bytes)</li>
+                    <li><strong>Authentication Tag:</strong> 128 bits</li>
+                    <li><strong>Use Case:</strong> File encryption, vault encryption</li>
+                    <li><strong>Security:</strong> Provides both confidentiality and authenticity</li>
+                </ul>
+            </div>
+            
+            <div class="feature-box" style="margin: 20px 0;">
+                <h4>Ed25519 (Edwards-curve Digital Signature Algorithm)</h4>
+                <ul>
+                    <li><strong>Type:</strong> Public-key signature system</li>
+                    <li><strong>Curve:</strong> Curve25519</li>
+                    <li><strong>Key Size:</strong> 256 bits</li>
+                    <li><strong>Signature Size:</strong> 512 bits (64 bytes)</li>
+                    <li><strong>Use Case:</strong> DID generation, credential signing</li>
+                    <li><strong>Security:</strong> Resistant to timing attacks, very fast</li>
+                </ul>
+            </div>
+            
+            <div class="feature-box" style="margin: 20px 0;">
+                <h4>PBKDF2 (Password-Based Key Derivation Function 2)</h4>
+                <ul>
+                    <li><strong>Type:</strong> Key derivation function</li>
+                    <li><strong>Hash:</strong> SHA-256</li>
+                    <li><strong>Iterations:</strong> 100,000</li>
+                    <li><strong>Salt Size:</strong> 128 bits (16 bytes)</li>
+                    <li><strong>Use Case:</strong> Deriving encryption keys from passphrases</li>
+                    <li><strong>Security:</strong> Slows down brute-force attacks</li>
+                </ul>
+            </div>
+            
+            <h3>📋 W3C Standards Implementation</h3>
+            
+            <div class="code-block">
+// Example Verifiable Credential (W3C Compliant)
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1"
+  ],
+  "type": ["VerifiableCredential", "DocumentOwnershipCredential"],
+  "issuer": {
+    "id": "did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH"
+  },
+  "issuanceDate": "2025-11-13T12:00:00Z",
+  "credentialSubject": {
+    "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+    "storageKey": "encrypted-doc-abc123",
+    "docType": "passport",
+    "uploadTimestamp": "2025-11-13T11:59:00Z"
+  },
+  "proof": {
+    "type": "JwtProof2020",
+    "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9..."
+  }
+}
+            </div>
+            
+            <div class="code-block">
+// Example Verifiable Presentation (W3C Compliant)
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1"
+  ],
+  "type": ["VerifiablePresentation"],
+  "holder": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+  "verifiableCredential": [
+    { /* Full VC object from above */ }
+  ],
+  "proof": {
+    "type": "JwtProof2020",
+    "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...",
+    "created": "2025-11-13T12:05:00Z",
+    "proofPurpose": "authentication",
+    "verificationMethod": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
+  }
+}
+            </div>
+            
+            <h3>⛓️ Smart Contract</h3>
+            
+            <div class="code-block">
+// Anchor.sol - Credential Hash Anchoring
+pragma solidity ^0.8.0;
+
+contract Anchor {
+    // Mapping of credential hashes to anchored status
+    mapping(bytes32 => bool) public anchors;
+    
+    // Event emitted when a hash is anchored
+    event Anchored(
+        bytes32 indexed hash,
+        address indexed sender,
+        uint256 timestamp
+    );
+    
+    // Anchor a credential hash
+    function anchor(bytes32 hash) public returns (bool) {
+        require(!anchors[hash], "Already anchored");
+        anchors[hash] = true;
+        emit Anchored(hash, msg.sender, block.timestamp);
+        return true;
+    }
+    
+    // Check if a hash is anchored
+    function isAnchored(bytes32 hash) public view returns (bool) {
+        return anchors[hash];
+    }
+}
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="card">
+            <h2><span class="icon">🚀</span> Getting Started</h2>
+            
+            <h3>Prerequisites</h3>
+            <div class="security-badge">Node.js 18+</div>
+            <div class="security-badge">npm 9+</div>
+            <div class="security-badge">Git</div>
+            <div class="security-badge">Cloudflare R2 Account (optional)</div>
+            
+            <h3>Quick Start</h3>
+            <div class="code-block">
+# 1. Install dependencies
+cd blockchain && npm install && cd ..
+cd issuer && npm install && cd ..
+cd client && npm install && cd ..
+
+# 2. Configure environment variables
+# Create .env files in issuer/ and client/ (see .env.example)
+
+# 3. Start Hardhat node (Terminal 1)
+cd blockchain
+npx hardhat node
+
+# 4. Deploy contract and start issuer (Terminal 2)
+cd blockchain
+npx hardhat run --network localhost scripts/deploy.js
+cd ../issuer
+npm start
+
+# 5. Start client (Terminal 3)
+cd client
+npm run dev
+
+# 6. Open browser
+# Navigate to http://localhost:5173
+            </div>
+            
+            <h3>Demo Flow</h3>
+            <ol>
+                <li>Upload an encrypted file → Get storage key</li>
+                <li>Generate your DID → Copy your identifier</li>
+                <li>Request a credential → Enter passphrase to store</li>
+                <li>View vault → See your encrypted credentials</li>
+                <li>Create presentation → Select credentials to share</li>
+                <li>Verify presentation → Paste VP JSON to verify</li>
+            </ol>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h2 style="color: white; margin-bottom: 20px;">🌟 Built with Standards, Security, and Privacy in Mind</h2>
+            <p style="font-size: 1.1em;">DID Credential Vault MVP - Demonstrating the Future of Digital Identity</p>
+            <p style="margin-top: 20px; opacity: 0.8;">W3C Compliant • Privacy-Preserving • Self-Sovereign • Blockchain-Anchored</p>
+            <p style="margin-top: 30px; font-size: 0.9em;">
+                📚 <a href="https://www.w3.org/TR/vc-data-model/" style="color: white;">W3C VC Spec</a> • 
+                🔗 <a href="https://www.w3.org/TR/did-core/" style="color: white;">W3C DID Core</a> • 
+                🛠️ <a href="https://veramo.io/" style="color: white;">Veramo Docs</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
