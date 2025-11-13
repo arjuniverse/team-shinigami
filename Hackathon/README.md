@@ -46,20 +46,24 @@ Open http://localhost:5173 - **That's it!** The system works offline.
 
 ### 4. Optional: Start Backend & Blockchain
 
-Only needed for production features:
+For full features (blockchain anchoring):
 
 ```bash
-# Terminal 1: Blockchain
+# Terminal 1: Blockchain (if not already running)
 cd blockchain
 npx hardhat node
 
-# Terminal 2: Deploy Contract
+# Terminal 2: Deploy Contract (one-time)
 cd blockchain
-npx hardhat run scripts/deploy-document-hash.js --network localhost
-# Copy contract address to client/.env
+npx hardhat run scripts/deploy.js --network localhost
+# Contract address auto-added to client/.env
 
-# Terminal 3: Backend
+# Terminal 3: Backend (optional)
 cd backend
+npm run dev
+
+# Terminal 4: Restart Frontend (to load contract address)
+cd client
 npm run dev
 ```
 
@@ -205,9 +209,31 @@ See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed solutions.
 
 ## 📚 Documentation
 
-- **README.md** (this file) - Overview and quick start
-- **QUICKSTART.md** - Detailed step-by-step setup
-- **TROUBLESHOOTING.md** - Solutions to common issues
+- **README.md** (this file) - Complete guide
+- **QUICKSTART.md** - Step-by-step setup
+- **TROUBLESHOOTING.md** - Common issues
+
+## 🔗 Blockchain Integration
+
+### Deploy Contract
+
+```bash
+cd blockchain
+npx hardhat run scripts/deploy.js --network localhost
+```
+
+Contract address is automatically saved to `client/.env`
+
+### MetaMask Setup (Optional)
+
+- **Network:** Hardhat Local
+- **RPC URL:** http://127.0.0.1:8545
+- **Chain ID:** 31337
+
+Import first Hardhat account:
+```
+Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
 
 ## 🎯 Use Cases
 

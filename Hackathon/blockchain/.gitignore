@@ -1,13 +1,34 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
-coverage
-coverage.json
-typechain
-typechain-types
+.env.local
+.env.*.local
 
 # Hardhat files
-cache
-artifacts
+cache/
+artifacts/
 
-# Deployment artifacts
-deployed-address.json
+# TypeChain
+typechain/
+typechain-types/
+
+# Coverage
+coverage/
+coverage.json
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Keep deployments for local development
+# Comment out the line below to ignore deployments
+# deployments/

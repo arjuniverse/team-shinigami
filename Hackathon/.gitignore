@@ -1,38 +1,56 @@
 # Dependencies
 node_modules/
-package-lock.json
-yarn.lock
+*/node_modules/
 
 # Environment variables
 .env
 .env.local
 .env.*.local
+*/.env
+*/.env.local
 
-# Build artifacts
+# Build outputs
 dist/
 build/
-out/
+*/dist/
+*/build/
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
-# Hardhat
-cache/
-artifacts/
-typechain/
-typechain-types/
-
-# IDE
-.vscode/
-.idea/
-.kiro/
+# OS files
+.DS_Store
+Thumbs.db
 *.swp
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+*.code-workspace
 
-# Misc
+# Testing
 coverage/
 .nyc_output/
-deployed-address.json
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# Service account keys
+*serviceAccountKey.json
+*.key
+*.pem
