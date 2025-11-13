@@ -11,10 +11,10 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-accent-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">DV</span>
+                <span className="text-white font-bold text-sm">CX</span>
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                DID Vault
+                CredaX
               </span>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 max-w-md">
@@ -104,7 +104,7 @@ export default function Footer() {
 
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
           <p className="text-sm text-center text-gray-600 dark:text-gray-400">
-            © {currentYear} DID Vault. Built with decentralization in mind.
+            © {currentYear} CredaX. Built with decentralization in mind.
           </p>
         </div>
       </div>

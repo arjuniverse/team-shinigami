@@ -28,6 +28,12 @@ export default function Navbar() {
     { name: 'Verify', href: '/verify' },
   ];
 
+  const secureDocNavigation = [
+    { name: 'Secure Upload', href: '/secure-upload' },
+    { name: 'My Documents', href: '/secure-files' },
+    { name: 'Verify Doc', href: '/secure-verify' },
+  ];
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -56,10 +62,10 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-accent-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">DV</span>
+              <span className="text-white font-bold text-sm">CX</span>
             </div>
             <span className="text-xl font-bold text-gray-900 dark:text-white hidden sm:block">
-              DID Vault
+              CredaX
             </span>
           </Link>
 
@@ -73,6 +79,26 @@ export default function Navbar() {
                   `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive
                       ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`
+                }
+              >
+                {item.name}
+              </NavLink>
+            ))}
+            
+            {/* Divider */}
+            <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-2"></div>
+            
+            {/* Secure Document Navigation */}
+            {secureDocNavigation.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-accent-100 dark:bg-accent-900 text-accent-700 dark:text-accent-300'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`
                 }
@@ -183,6 +209,10 @@ export default function Navbar() {
       >
         <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
           <div className="px-2 pt-2 pb-3 space-y-1">
+            {/* Credentials Section */}
+            <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Credentials
+            </div>
             {navigation.map((item) => (
               <NavLink
                 key={item.name}
@@ -199,11 +229,33 @@ export default function Navbar() {
                 {item.name}
               </NavLink>
             ))}
+            
+            {/* Secure Documents Section */}
+            <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-4">
+              Secure Documents
+            </div>
+            {secureDocNavigation.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block px-3 py-2 rounded-lg text-base font-medium ${
+                    isActive
+                      ? 'bg-accent-100 dark:bg-accent-900 text-accent-700 dark:text-accent-300'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`
+                }
+              >
+                {item.name}
+              </NavLink>
+            ))}
+            
             {!user && (
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2 rounded-lg text-base font-medium text-primary-600 dark:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="block px-3 py-2 rounded-lg text-base font-medium text-primary-600 dark:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 mt-4"
               >
                 Login
               </Link>

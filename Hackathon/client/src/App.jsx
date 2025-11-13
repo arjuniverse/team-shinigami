@@ -14,6 +14,12 @@ import Verify from './pages/Verify';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
+// Secure Document Pages (new)
+import SecureUpload from './pages/SecureUpload';
+import SecureFiles from './pages/SecureFiles';
+import SecureDecrypt from './pages/SecureDecrypt';
+import SecureVerify from './pages/SecureVerify';
+
 // Protected Route wrapper
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -72,6 +78,41 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            
+            {/* Secure Document Routes */}
+            <Route
+              path="secure-upload"
+              element={
+                <ProtectedRoute>
+                  <SecureUpload />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="secure-files"
+              element={
+                <ProtectedRoute>
+                  <SecureFiles />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="secure-decrypt"
+              element={
+                <ProtectedRoute>
+                  <SecureDecrypt />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="secure-verify"
+              element={
+                <ProtectedRoute>
+                  <SecureVerify />
+                </ProtectedRoute>
+              }
+            />
+            
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

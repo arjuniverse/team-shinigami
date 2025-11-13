@@ -6,7 +6,9 @@
   "scripts": {
     "node": "hardhat node",
     "deploy": "hardhat run --network localhost scripts/deploy.js",
-    "compile": "hardhat compile"
+    "deploy:document-hash": "hardhat run --network localhost scripts/deploy-document-hash.js",
+    "compile": "hardhat compile",
+    "test": "hardhat test"
   },
   "keywords": ["hardhat", "blockchain", "did", "credentials"],
   "author": "",
