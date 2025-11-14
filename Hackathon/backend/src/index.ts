@@ -77,7 +77,13 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   res.status(500).json({ success: false, error: 'Internal server error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend server running on http://localhost:${PORT}`);
-  console.log(`📝 Storage mode: ${process.env.STORAGE_MODE || 'json'}`);
-});
+// For Vercel serverless deployment
+export default app;
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Backend server running on http://localhost:${PORT}`);
+    console.log(`📝 Storage mode: ${process.env.STORAGE_MODE || 'json'}`);
+  });
+}
