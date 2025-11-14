@@ -14,11 +14,14 @@ import Verify from './pages/Verify';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
-// Secure Document Pages (new)
+// Secure Document Pages
 import SecureUpload from './pages/SecureUpload';
 import SecureFiles from './pages/SecureFiles';
 import SecureDecrypt from './pages/SecureDecrypt';
 import SecureVerify from './pages/SecureVerify';
+
+// DID Management Page
+import DidPanel from './pages/DidPanel';
 
 // Protected Route wrapper
 function ProtectedRoute({ children }) {
@@ -109,6 +112,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <SecureVerify />
+                </ProtectedRoute>
+              }
+            />
+            
+            {/* DID Management Route */}
+            <Route
+              path="did"
+              element={
+                <ProtectedRoute>
+                  <DidPanel />
                 </ProtectedRoute>
               }
             />

@@ -1,302 +1,234 @@
-# 🔐 Secure Document Workflow System
+# 🔐 Secure Document Workflow with DID-Auth
 
-Complete end-to-end encrypted document management with blockchain anchoring.
+A full-stack secure document management system with client-side encryption, decentralized storage (IPFS), blockchain verification, and DID-based authentication.
 
-## ✨ Features
+## 🚀 Quick Start
 
-- **Client-Side Encryption**: AES-256-GCM with PBKDF2 (200k iterations)
-- **Decentralized Storage**: IPFS via Lighthouse.Storage
-- **Blockchain Anchoring**: Immutable hash storage on Ethereum
-- **Document Verification**: Verify authenticity against blockchain
-- **Offline Mode**: Works without backend using localStorage
-- **Zero-Knowledge**: Plaintext never leaves your browser
+### Prerequisites
+- Node.js >= 18
+- MetaMask browser extension
 
-## 🚀 Quick Start (5 Minutes)
-
-### 1. Install Dependencies
+### Installation
 
 ```bash
-npm run setup
-```
+# Install all dependencies
+npm install
 
-Or manually:
-```bash
+# Or install individually
 cd backend && npm install
 cd ../blockchain && npm install
 cd ../client && npm install
+cd ../issuer && npm install
 ```
 
-### 2. Configure Environment
+### Setup
 
+1. **Configure Backend**
 ```bash
-# Client
+cd backend
+cp .env.example .env
+# Edit .env with your configuration
+```
+
+2. **Configure Client**
+```bash
 cd client
 cp .env.example .env
-# Edit .env - already configured for offline mode!
+# Edit .env with your configuration
 ```
 
-### 3. Start Frontend (Offline Mode)
-
+3. **Generate Issuer Keys**
 ```bash
-cd client
-npm run dev
+cd issuer
+npm run generate-key
+cp .env.generated .env
 ```
 
-Open http://localhost:5173 - **That's it!** The system works offline.
+### Run
 
-### 4. Optional: Start Backend & Blockchain
-
-For full features (blockchain anchoring):
-
+**Terminal 1 - Blockchain:**
 ```bash
-# Terminal 1: Blockchain (if not already running)
 cd blockchain
 npx hardhat node
+```
 
-# Terminal 2: Deploy Contract (one-time)
-cd blockchain
-npx hardhat run scripts/deploy.js --network localhost
-# Contract address auto-added to client/.env
-
-# Terminal 3: Backend (optional)
+**Terminal 2 - Backend:**
+```bash
 cd backend
 npm run dev
+```
 
-# Terminal 4: Restart Frontend (to load contract address)
+**Terminal 3 - Issuer:**
+```bash
+cd issuer
+npm run dev
+```
+
+**Terminal 4 - Client:**
+```bash
 cd client
 npm run dev
 ```
 
-## 📖 Usage
+Open http://localhost:5173
 
-### Upload Document
+## 📚 Features
 
-1. Go to `/secure-upload`
-2. Select file
-3. Enter password
-4. Click "Encrypt & Upload"
-5. (Optional) Store hash on blockchain
+### Document Management
+- **Client-side Encryption**: AES-256-GCM encryption before upload
+- **Decentralized Storage**: IPFS via Lighthouse
+- **Blockchain Anchoring**: Immutable proof on Ethereum
+- **Verification**: Verify document authenticity
+- **Secure Decryption**: Password-based decryption
 
-### View Files
+### DID & Verifiable Credentials
+- **DID:PKH**: Decentralized identifiers from Ethereum addresses
+- **DID-Auth**: Challenge-response authentication via MetaMask
+- **JWT-VC**: W3C compliant verifiable credentials
+- **Session Management**: Secure token-based sessions
 
-Go to `/secure-files` to see all uploaded documents
+## 🏗️ Architecture
 
-### Decrypt Document
+```
+┌─────────────────────────────────────────────────────┐
+│                  CLIENT (React)                      │
+│  DID Auth → Encrypt → IPFS → Blockchain Anchor     │
+└─────────────────────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────┐
+│              ISSUER (Express)                        │
+│  DID-Auth Challenge → JWT-VC Issuance              │
+└─────────────────────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────┐
+│              BACKEND (Express)                       │
+│  Metadata Management → Firestore/JSON              │
+└─────────────────────────────────────────────────────┘
+```
 
-1. Click "Decrypt" on any file
-2. Enter password
-3. Download decrypted file
+## 🔒 Security
 
-### Verify Document
+- **Zero-Knowledge**: Server never sees plaintext
+- **Client-Side Encryption**: AES-256-GCM
+- **Strong Key Derivation**: PBKDF2-SHA256 (200k iterations)
+- **DID-Based Auth**: Cryptographic proof of identity
+- **Session Tokens**: Short-lived (10 min expiry)
+- **Challenge-Response**: Prevents replay attacks
 
-1. Go to `/secure-verify`
-2. Upload original file
-3. See verification results
+## 📖 Documentation
 
-## 🔧 Configuration
+- **QUICKSTART.md** - Detailed setup guide
+- **METAMASK_SETUP_GUIDE.md** - MetaMask configuration
+- **QUICKSTART_ISSUER.md** - Issuer service setup
+- **PROJECT_OVERVIEW.md** - Complete system overview
+- **TROUBLESHOOTING.md** - Common issues and solutions
+- **issuer/README.md** - Issuer API documentation
 
-### Offline Mode (Default)
+## 🧪 Testing
 
 ```bash
-# client/.env
-VITE_USE_MOCK_STORAGE=true  # Uses localStorage
-VITE_BACKEND_URL=http://localhost:3001  # Optional
-```
+# Run issuer tests
+cd issuer
+npm test
 
-### Production Mode
-
-```bash
-# client/.env
-VITE_USE_MOCK_STORAGE=false  # Uses real IPFS
-VITE_LIGHTHOUSE_API_KEY=your_key_here
-VITE_DOCUMENT_HASH_CONTRACT=0x...
-```
-
-Get Lighthouse API key: https://files.lighthouse.storage/
-
-## 📁 Project Structure
-
-```
-/
-├── backend/          # Express + TypeScript API
-├── blockchain/       # Hardhat + Solidity contracts
-├── client/          # React + TypeScript frontend
-├── issuer/          # Existing DID issuer (preserved)
-├── README.md        # This file
-├── QUICKSTART.md    # Detailed setup guide
-└── TROUBLESHOOTING.md  # Common issues & solutions
-```
-
-## 🔐 Security
-
-### Encryption
-
-- **Algorithm**: AES-256-GCM (authenticated encryption)
-- **Key Derivation**: PBKDF2-SHA256, 200,000 iterations
-- **Random Salt**: 16 bytes per file
-- **Random IV**: 12 bytes per file
-
-### Storage
-
-- **Mock Mode**: localStorage (testing only)
-- **Production**: IPFS via Lighthouse (permanent, decentralized)
-
-### Blockchain
-
-- **Hash Storage**: SHA-256 of original file
-- **Timestamp**: Immutable proof of existence
-- **Gas Optimized**: keccak256 mapping
-
-## ⚠️ Important Notes
-
-### Password Management
-
-- **No recovery possible** if password is lost
-- Use strong passwords (12+ characters)
-- Store passwords securely
-
-### Mock Storage Limits
-
-- localStorage: 5-10MB total
-- Use files < 100KB for testing
-- Clear storage regularly
-
-### Production Deployment
-
-- Use real Lighthouse (disable mock storage)
-- Deploy backend with Firestore
-- Deploy contract to testnet/mainnet
-- Enable HTTPS
-- Implement rate limiting
-
-## 🐛 Troubleshooting
-
-### Storage Full
-
-**Error**: `QuotaExceededError`
-
-**Solution**:
-1. Go to `/secure-files`
-2. Click "Clear Storage" button
-3. Or use smaller files (< 100KB)
-
-### Backend Not Running
-
-**Error**: `ERR_CONNECTION_REFUSED`
-
-**Solution**: System works offline! Metadata saves to localStorage automatically.
-
-To start backend:
-```bash
-cd backend
-npm run dev
-```
-
-### MetaMask Not Installed
-
-**Error**: `MetaMask not installed`
-
-**Solution**: Blockchain features are optional. Click "Skip Blockchain" to complete upload.
-
-To enable blockchain:
-1. Install MetaMask: https://metamask.io/
-2. Refresh page
-3. Connect wallet
-
-### More Issues?
-
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed solutions.
-
-## 📚 Documentation
-
-- **README.md** (this file) - Complete guide
-- **QUICKSTART.md** - Step-by-step setup
-- **TROUBLESHOOTING.md** - Common issues
-
-## 🔗 Blockchain Integration
-
-### Deploy Contract
-
-```bash
-cd blockchain
-npx hardhat run scripts/deploy.js --network localhost
-```
-
-Contract address is automatically saved to `client/.env`
-
-### MetaMask Setup (Optional)
-
-- **Network:** Hardhat Local
-- **RPC URL:** http://127.0.0.1:8545
-- **Chain ID:** 31337
-
-Import first Hardhat account:
-```
-Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-```
-
-## 🎯 Use Cases
-
-- **Legal Documents**: Contracts, agreements
-- **Medical Records**: Patient data, prescriptions
-- **Academic Credentials**: Diplomas, certificates
-- **Identity Documents**: Passports, licenses
-- **Any Sensitive Files**: Encrypted and verifiable
-
-## 🔄 Workflow
-
-```
-1. Select File → 2. Encrypt (AES-256) → 3. Upload (IPFS)
-                                              ↓
-4. Verify ← 5. Decrypt ← 6. Store Hash (Blockchain)
+# Run with coverage
+npm test -- --coverage
 ```
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18, TypeScript, Vite, TailwindCSS
 - **Backend**: Express, TypeScript, Firestore
-- **Blockchain**: Solidity 0.8.20, Hardhat, Ethers.js
-- **Storage**: Lighthouse.Storage (IPFS)
-- **Crypto**: Web Crypto API
+- **Issuer**: Express, TypeScript, JWT
+- **Blockchain**: Solidity, Hardhat, Ethers.js
+- **Storage**: IPFS (Lighthouse)
+- **Crypto**: Web Crypto API, AES-256-GCM
+- **DID**: did:pkh, W3C DIDs
+- **VC**: JWT-VC, W3C Verifiable Credentials
 
-## 📊 API Endpoints
+## 📦 Project Structure
+
+```
+├── backend/          # Express API server
+├── blockchain/       # Hardhat + Solidity contracts
+├── client/           # React frontend
+└── issuer/           # DID-Auth & JWT-VC service
+```
+
+## 🚀 Deployment
+
+### Development
+- Frontend: Vite dev server (localhost:5173)
+- Backend: Express (localhost:3001)
+- Issuer: Express (localhost:8080)
+- Blockchain: Hardhat local (localhost:8545)
+
+### Production
+- Frontend: Vercel/Netlify
+- Backend: Railway/Heroku/AWS
+- Issuer: Same or separate instance
+- Blockchain: Ethereum mainnet/testnet
+- Storage: Lighthouse (IPFS)
+- Database: Firestore
+
+## 🔑 Environment Variables
+
+### Backend (.env)
+```
+PORT=3001
+NODE_ENV=development
+FIREBASE_PROJECT_ID=your-project-id
+# ... see .env.example
+```
+
+### Client (.env)
+```
+VITE_BACKEND_URL=http://localhost:3001
+VITE_LIGHTHOUSE_API_KEY=your-api-key
+# ... see .env.example
+```
+
+### Issuer (.env)
+```
+ISSUER_PRIVATE_KEY=0x...
+ISSUER_DID=did:pkh:eip155:1:0x...
+SESSION_SECRET=your-secret
+PORT=8080
+```
+
+## 📝 API Endpoints
+
+### Issuer
+- `GET /issuer/challenge?did=<did>` - Get challenge
+- `POST /issuer/verify-challenge` - Verify signature
+- `POST /issuer/issue-vc` - Issue credential
+- `GET /issuer/verify-vc?jwt=<jwt>` - Verify credential
 
 ### Backend
-
-- `POST /api/metadata` - Create document metadata
+- `POST /api/metadata` - Create metadata
 - `GET /api/metadata` - List documents
-- `GET /api/metadata/:id` - Get by ID
-- `GET /api/metadata/byHash/:sha256` - Get by hash
-- `PATCH /api/metadata/updateTx` - Update transaction hash
+- `GET /api/metadata/:id` - Get document
+- `GET /api/metadata/byHash/:sha256` - Find by hash
 
-### Smart Contract
+## 🤝 Contributing
 
-- `storeHash(string hash)` - Store SHA-256 on blockchain
-- `checkHash(string hash)` - Verify hash exists
-- `getHashTimestamp(string hash)` - Get storage timestamp
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-## 🤝 Integration
-
-This system coexists with your existing DID credential vault:
-
-- **Existing**: `/upload`, `/vault`, `/verify` (credentials)
-- **New**: `/secure-upload`, `/secure-files`, `/secure-verify` (documents)
-
-Both systems work independently without conflicts.
-
-## 📝 License
+## 📄 License
 
 MIT
 
 ## 🙏 Acknowledgments
 
-- Lighthouse.Storage for IPFS integration
+- W3C for DID and VC specifications
+- Lighthouse for IPFS storage
+- MetaMask for wallet integration
 - Hardhat for Ethereum development
-- Web Crypto API for client-side encryption
 
 ---
 
-**Status**: ✅ Fully functional in offline mode  
-**Backend Required**: No (optional)  
-**MetaMask Required**: No (optional for blockchain)  
-**Ready to Use**: Yes!
+**Built with** ❤️ **using React, TypeScript, Solidity, and Web3 technologies**
